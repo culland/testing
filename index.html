@@ -1,14 +1,14 @@
 <html>
 <head>
-<script language="javascript">
-
-function do_stuff(){
-  alert('test');
-}
-
-</script>
+  <script language="javascript">
+    function do_stuff(){
+      alert(document.getElementById("theval").value);
+    }
+  </script>
 </head>
 <body>
-<input type="button" value="Push Me" onClick="do_stuff();">
+
+  <input type="text" name="theval" id="theval" /> <input type="button" value="Push Me" onClick="do_stuff();"><br/><br/>
+
 </body>
 </html>
