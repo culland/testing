@@ -2,13 +2,33 @@
 <head>
   <script language="javascript">
     function do_stuff(){
-      alert(document.getElementById("theval").value);
+      document.querySelector('#status').innerHTML = "Executing...";
+      var db = openDatabase('mydb', '1.0', 'test', 2 * 1024 * 1024);
+      var theboxval = document.getElementById("theval").value;
+      db.transaction(function (tx) { 
+        tx.executeSql('CREATE TABLE IF NOT EXISTS test (thevalue)');
+        tx.executeSql('INSERT INTO test (thevalue) VALUES (?)',[theboxval]);
+      });
+      db.transaction(function (tx) {
+        tx.executeSql('SELECT * FROM test', [], function (tx, results) {
+        var len = results.rows.length, i;
+        msg = "<p>Found rows: " + len + "</p>";
+        document.querySelector('#status').innerHTML +=  msg;
+        for (i = 0; i < len; i++){
+          msg = "<p><b>" + results.rows.item(i).thevalue + "</b></p>";
+          document.querySelector('#status').innerHTML +=  msg;
+        }
+        }, null);
+      });
     }
+
   </script>
 </head>
 <body>
 
   <input type="text" name="theval" id="theval" /> <input type="button" value="Push Me" onClick="do_stuff();"><br/><br/>
+
+<div id="status" name="status">Waiting...</div>
 
 </body>
 </html>
